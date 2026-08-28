@@ -54,7 +54,7 @@ Security improvements will be made as the project develops.
 
 ⚙️ Installation
 1. Clone the repository
-git clone https://github.com/YOUR-USERNAME/Password-Manager.git
+git clone https://github.com/singhbrarharmandeep0-hue/Password-Manager.git
 2. Open the project
 cd Password-Manager
 3. Install dependencies
