@@ -1,4 +1,7 @@
 import customtkinter as ctk
+from database import create_database
+
+create_database()
 
 # Appearance
 ctk.set_appearance_mode("dark")
