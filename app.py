@@ -21,7 +21,56 @@ app.geometry("900x600")
 # -----------------------------
 
 def add_password():
-    print("Add password clicked")
+
+    add_window = ctk.CTkToplevel(app)
+
+    add_window.title("Add Password")
+    add_window.geometry("500x500")
+
+    title = ctk.CTkLabel(
+        add_window,
+        text="Add New Password",
+        font=("Arial", 24, "bold")
+    )
+
+    title.pack(pady=30)
+
+    account_entry = ctk.CTkEntry(
+        add_window,
+        placeholder_text="Account name",
+        width=350,
+        height=45
+    )
+
+    account_entry.pack(pady=10)
+
+    username_entry = ctk.CTkEntry(
+        add_window,
+        placeholder_text="Username / Email",
+        width=350,
+        height=45
+    )
+
+    username_entry.pack(pady=10)
+
+    password_entry = ctk.CTkEntry(
+        add_window,
+        placeholder_text="Password",
+        show="*",
+        width=350,
+        height=45
+    )
+
+    password_entry.pack(pady=10)
+
+    save_button = ctk.CTkButton(
+        add_window,
+        text="Save Password",
+        width=200,
+        height=45
+    )
+
+    save_button.pack(pady=30)
 
 
 def view_passwords():
