@@ -1,4 +1,3 @@
-
 import sqlite3
 
 
@@ -14,6 +13,19 @@ def create_database():
             password TEXT NOT NULL
         )
     """)
+
+    connection.commit()
+    connection.close()
+
+
+def add_password(account, username, password):
+    connection = sqlite3.connect("password_manager.db")
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        INSERT INTO passwords (account, username, password)
+        VALUES (?, ?, ?)
+    """, (account, username, password))
 
     connection.commit()
     connection.close()
