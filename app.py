@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from database import create_database
+from database import create_database, add_password
 
 # Create database
 create_database()
@@ -20,7 +20,7 @@ app.geometry("900x600")
 # Functions
 # -----------------------------
 
-def add_password():
+def open_add_password():
 
     add_window = ctk.CTkToplevel(app)
 
@@ -63,11 +63,30 @@ def add_password():
 
     password_entry.pack(pady=10)
 
+
+    def save():
+
+        account = account_entry.get()
+        username = username_entry.get()
+        password = password_entry.get()
+
+        if not account or not username or not password:
+            print("Please fill all fields")
+            return
+
+        add_password(account, username, password)
+
+        print("Password saved successfully!")
+
+        add_window.destroy()
+
+
     save_button = ctk.CTkButton(
         add_window,
         text="Save Password",
         width=200,
-        height=45
+        height=45,
+        command=save
     )
 
     save_button.pack(pady=30)
@@ -107,7 +126,7 @@ add_button = ctk.CTkButton(
     width=250,
     height=50,
     font=("Arial", 16),
-    command=add_password
+    command=open_add_password
 )
 
 add_button.pack(pady=15)
