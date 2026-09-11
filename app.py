@@ -1,6 +1,10 @@
 import customtkinter as ctk
-from database import create_database, add_password
 
+from database import create_database, add_password, get_passwords
+
+from encryption import encrypt_password, decrypt_password
+
+create_database()
 # Create database
 create_database()
 
@@ -95,7 +99,7 @@ def open_add_password():
 def view_passwords():
     print("View passwords clicked")
 
-
+    passwords = get_passwords()
 # -----------------------------
 # Dashboard
 # -----------------------------
