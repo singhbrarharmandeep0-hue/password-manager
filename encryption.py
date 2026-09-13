@@ -5,16 +5,13 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 
-SALT = b"static_salt_123"
-
-
-def derive_key(master_password):
+def derive_key(master_password, salt):
 
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),
         length=32,
-        salt=SALT,
-        iterations=100000,
+        salt=salt,
+        iterations=600000
     )
 
     key = base64.urlsafe_b64encode(
@@ -24,16 +21,26 @@ def derive_key(master_password):
     return key
 
 
-def create_fernet(master_password):
+def create_fernet(master_password, salt):
 
-    key = derive_key(master_password)
+    key = derive_key(
+        master_password,
+        salt
+    )
 
     return Fernet(key)
 
 
-def encrypt_password(master_password, password):
+def encrypt_password(
+    master_password,
+    password,
+    salt
+):
 
-    fer = create_fernet(master_password)
+    fer = create_fernet(
+        master_password,
+        salt
+    )
 
     encrypted = fer.encrypt(
         password.encode()
@@ -42,9 +49,16 @@ def encrypt_password(master_password, password):
     return encrypted
 
 
-def decrypt_password(master_password, encrypted_password):
+def decrypt_password(
+    master_password,
+    encrypted_password,
+    salt
+):
 
-    fer = create_fernet(master_password)
+    fer = create_fernet(
+        master_password,
+        salt
+    )
 
     decrypted = fer.decrypt(
         encrypted_password.encode()
