@@ -1,10 +1,12 @@
+import os
 import base64
 
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
-
+def generate_salt():
+    return os.urandom(16)
 def derive_key(master_password, salt):
 
     kdf = PBKDF2HMAC(
