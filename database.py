@@ -3,7 +3,9 @@ import sqlite3
 
 def create_database():
 
-    connection = sqlite3.connect("password_manager.db")
+    connection = sqlite3.connect(
+        "password_manager.db"
+    )
 
     cursor = connection.cursor()
 
@@ -13,6 +15,13 @@ def create_database():
             account TEXT NOT NULL,
             username TEXT NOT NULL,
             password TEXT NOT NULL
+        )
+    """)
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS settings (
+            id INTEGER PRIMARY KEY,
+            salt BLOB NOT NULL
         )
     """)
 
