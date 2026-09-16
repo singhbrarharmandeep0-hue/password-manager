@@ -62,3 +62,19 @@ def get_passwords():
     connection.close()
 
     return passwords
+def save_salt(salt):
+
+    connection = sqlite3.connect(
+        "password_manager.db"
+    )
+
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        INSERT INTO settings (id, salt)
+        VALUES (1, ?)
+    """, (salt,))
+
+    connection.commit()
+
+    connection.close()
