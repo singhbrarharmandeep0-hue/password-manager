@@ -1,14 +1,16 @@
 import sqlite3
 
 
+DATABASE = "password_manager.db"
+
+
 def create_database():
 
-    connection = sqlite3.connect(
-        "password_manager.db"
-    )
+    connection = sqlite3.connect(DATABASE)
 
     cursor = connection.cursor()
 
+    # Password storage
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS passwords (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -18,10 +20,12 @@ def create_database():
         )
     """)
 
+    # Security settings
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS settings (
             id INTEGER PRIMARY KEY,
-            salt BLOB NOT NULL
+            salt BLOB NOT NULL,
+            verifier BLOB NOT NULL
         )
     """)
 
@@ -30,16 +34,56 @@ def create_database():
     connection.close()
 
 
-def add_password(account, username, encrypted_password):
+def save_security_data(salt, verifier):
 
-    connection = sqlite3.connect("password_manager.db")
+    connection = sqlite3.connect(DATABASE)
 
     cursor = connection.cursor()
 
     cursor.execute("""
-        INSERT INTO passwords (account, username, password)
+        INSERT INTO settings (id, salt, verifier)
+        VALUES (1, ?, ?)
+    """, (salt, verifier))
+
+    connection.commit()
+
+    connection.close()
+
+
+def get_security_data():
+
+    connection = sqlite3.connect(DATABASE)
+
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT salt, verifier
+        FROM settings
+        WHERE id = 1
+    """)
+
+    result = cursor.fetchone()
+
+    connection.close()
+
+    return result
+
+
+def add_password(account, username, encrypted_password):
+
+    connection = sqlite3.connect(DATABASE)
+
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        INSERT INTO passwords
+        (account, username, password)
         VALUES (?, ?, ?)
-    """, (account, username, encrypted_password))
+    """, (
+        account,
+        username,
+        encrypted_password
+    ))
 
     connection.commit()
 
@@ -48,7 +92,7 @@ def add_password(account, username, encrypted_password):
 
 def get_passwords():
 
-    connection = sqlite3.connect("password_manager.db")
+    connection = sqlite3.connect(DATABASE)
 
     cursor = connection.cursor()
 
@@ -62,42 +106,3 @@ def get_passwords():
     connection.close()
 
     return passwords
-def save_salt(salt):
-
-    connection = sqlite3.connect(
-        "password_manager.db"
-    )
-
-    cursor = connection.cursor()
-
-    cursor.execute("""
-        INSERT INTO settings (id, salt)
-        VALUES (1, ?)
-    """, (salt,))
-
-    connection.commit()
-
-    connection.close()
-    
-def get_salt():
-
-    connection = sqlite3.connect(
-        "password_manager.db"
-    )
-
-    cursor = connection.cursor()
-
-    cursor.execute("""
-        SELECT salt
-        FROM settings
-        WHERE id = 1
-    """)
-
-    result = cursor.fetchone()
-
-    connection.close()
-
-    if result:
-        return result[0]
-
-    return None
