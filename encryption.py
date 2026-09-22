@@ -45,7 +45,7 @@ def create_verifier(master_password, salt):
 def verify_master_password(
     master_password,
     salt,
-    stored_verifier
+    stored_verifier 
 ):
 
     try:
