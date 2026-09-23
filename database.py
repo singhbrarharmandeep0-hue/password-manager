@@ -56,7 +56,7 @@ def get_security_data():
     cursor = connection.cursor()
 
     cursor.execute("""
-        SELECT salt, verifier
+        SELECT salt
         FROM settings
         WHERE id = 1
     """)
