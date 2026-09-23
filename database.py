@@ -6,11 +6,12 @@ DATABASE = "password_manager.db"
 
 def create_database():
 
-    connection = sqlite3.connect(DATABASE)
+    connection = sqlite3.connect(
+        "password_manager.db"
+    )
 
     cursor = connection.cursor()
 
-    # Password storage
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS passwords (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -20,12 +21,10 @@ def create_database():
         )
     """)
 
-    # Security settings
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS settings (
             id INTEGER PRIMARY KEY,
-            salt BLOB NOT NULL,
-            verifier BLOB NOT NULL
+            salt BLOB NOT NULL
         )
     """)
 
@@ -41,9 +40,9 @@ def save_security_data(salt, verifier):
     cursor = connection.cursor()
 
     cursor.execute("""
-        INSERT INTO settings (id, salt, verifier)
-        VALUES (1, ?, ?)
-    """, (salt, verifier))
+        INSERT INTO settings (id, salt)
+        VALUES (1, ?)
+    """, (salt,))
 
     connection.commit()
 
